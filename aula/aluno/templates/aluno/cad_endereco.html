@@ -1,0 +1,9 @@
+{% extends 'aluno/base.html' %}
+
+{% block conteudo %}    
+    <form action="{% url 'aluno:cadendereco' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Vai" />
+    </form>
+{% endblock conteudo %}

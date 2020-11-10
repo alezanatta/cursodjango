@@ -1,0 +1,51 @@
+{% extends "aluno/base.html" %}
+
+{% load crispy_forms_tags %}
+
+    {% block conteudo %}
+        <div class="row">
+            <div class="col-3">
+                {% if form %}
+                    {% for f in form %}
+                        <div class="form-inline">
+                            <div class="form-group">
+                                {{ f|as_crispy_field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                        
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>Nome</td>
+                        <td>Matricula</td>
+                        <td>Data de nascimento</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if alunos %}
+
+                    {% for aluno in alunos %}
+                        <tr>
+                            <td>{{ aluno.nome }}</td>
+                            <td>{{ aluno.matricula }}</td>
+                            <td>{{ aluno.data_nascimento }}</td>
+                        </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td>Nenhuma informação a apresentar</td>
+                        <td></td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {% endblock conteudo %}
