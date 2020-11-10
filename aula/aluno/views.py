@@ -56,13 +56,23 @@ def cad_endereco(request):
 
 def busca_aluno(request):
 
-    form = BuscaAlunoForm()
-
-    alunos = Aluno.objects.all() # Select * from aluno;
-
-    context = {
-        "alunos": alunos,
-        "form":form,
-    }
-
-    return render(request, "aluno/aluno.html", context)
+    if request.method == "GET":
+        form = BuscaAlunoForm()
+        alunos = Aluno.objects.all() # Select * from aluno;
+        context = {
+            "alunos": alunos,
+            "form":form,
+        }
+        return render(request, "aluno/aluno.html", context)
+    elif request.method == "POST":
+        
+        form = BuscaAlunoForm(request.POST)
+        if form.is_valid():
+            matricula = form.cleaned_data["matricula"]
+            alunos = Aluno.objects.all().filter(matricula=matricula)
+            form = BuscaAlunoForm()
+            context = {
+            "alunos": alunos,
+            "form":form,
+            }
+            return render(request, "aluno/aluno.html", context)

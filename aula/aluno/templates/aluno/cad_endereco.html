@@ -3,7 +3,7 @@
 {% block conteudo %}    
     <form action="{% url 'aluno:cadendereco' %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% include "aluno/form.html" %}
         <input type="submit" value="Vai" />
     </form>
 {% endblock conteudo %}

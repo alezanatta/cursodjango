@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+
+{% for f in form %}
+    <div class="form">
+        {{ f|as_crispy_field }}
+    </div>
+{% endfor %}

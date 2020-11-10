@@ -17,6 +17,9 @@ class Endereco(models.Model):
     nm_bairro = models.CharField(max_length=30)
     fk_cidade = models.ForeignKey(Cidade, on_delete=models.PROTECT)
 
+    def __str__(self): ## Dois _ antes e dois _ depois
+        return str(self.nm_rua) + " " + str(self.nm_bairro)
+
 class Aluno(models.Model):
     matricula = models.IntegerField(default=0)
     nome = models.CharField(max_length=50)

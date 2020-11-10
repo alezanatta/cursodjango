@@ -5,7 +5,7 @@
     <form action="{% url 'aluno:cadastra' %}" method="post">
         {% csrf_token %}
         <table class="table">
-            {{ form.as_table }}
+            {% include "aluno/form.html" %}
         </table>
         <input type="submit" value="Vai" />
     </form>
