@@ -1,0 +1,30 @@
+<div class="mt-4"></div>
+
+<a href="{% url 'aluno:edit' 'edit' aluno.id %}"><button class="btn btn-warning">Editar</button></a>
+{# http://localhost:8000/aluno/edit/1/ #}
+
+
+<div class="mt-4"></div>
+
+<table class="table table-striped">
+    <tr>
+        <td>Nome:</td>
+        <td>{{ aluno.nome }}</td>
+    </tr>
+    <tr>
+        <td>Matricula</td>
+        <td>{{ aluno.matricula }}</td>
+    </tr>
+    <tr>
+        <td>Endereço:</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Logradouro:</td>
+        <td>{{ aluno.fk_endereco.nm_rua }}</td>
+    </tr>
+    <tr>
+        <td>Bairro: </td>
+        <td>{{ aluno.fk_endereco.nm_bairro }}</td>
+    </tr>    
+</table>

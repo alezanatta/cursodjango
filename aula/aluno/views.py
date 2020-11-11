@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from datetime import datetime
 
@@ -7,6 +8,7 @@ from .models import Aluno
 
 from .forms import CidadeForm
 from .forms import EnderecoForm
+from .forms import AlunoForm
 
 from .forms import BuscaAlunoForm
 
@@ -54,25 +56,62 @@ def cad_endereco(request):
     else:
         return HttpResponse("Não tem")
 
-def busca_aluno(request):
+def busca_aluno(request, cd_aluno=0, tipo=""):
+
+    context = {
+        "form":None,
+        "alunos":None,
+        "aluno":None,
+        "edit_aluno":None,
+    }
 
     if request.method == "GET":
-        form = BuscaAlunoForm()
-        alunos = Aluno.objects.all() # Select * from aluno;
-        context = {
-            "alunos": alunos,
-            "form":form,
-        }
-        return render(request, "aluno/aluno.html", context)
+        if tipo == "edit":
+            aluno = Aluno.objects.get(pk=cd_aluno)
+            form = AlunoForm(instance=aluno)
+            context["edit_aluno"] = form
+            return render(request, "aluno/aluno.html", context)
+
+        if cd_aluno:
+            aluno = Aluno.objects.get(pk=cd_aluno)
+            form = BuscaAlunoForm()
+            context["aluno"] = aluno
+            context["form"] = form
+            
+            return render(request, "aluno/aluno.html", context)
+
+        else:
+            form = BuscaAlunoForm()
+            alunos = Aluno.objects.all() # Select * from aluno;
+            context["alunos"] = alunos
+            context["form"] = form
+            return render(request, "aluno/aluno.html", context)
     elif request.method == "POST":
+        if tipo == "delete":
+            form = AlunoForm(request.POST)
+            if form.is_valid():
+                aluno = Aluno()
+                aluno.id = form.cleaned_data["id"]
+                aluno.delete()
+
+
+
+        if tipo == 'edit':
+            form = AlunoForm(request.POST)
+            if form.is_valid():
+                form.save()
+                form = BuscaAlunoForm()
+                alunos = Aluno.objects.all()
+                context["alunos"] = alunos
+                context["form"] = form
+                return HttpResponseRedirect(reverse("aluno:index"))
+
         
         form = BuscaAlunoForm(request.POST)
         if form.is_valid():
             matricula = form.cleaned_data["matricula"]
             alunos = Aluno.objects.all().filter(matricula=matricula)
             form = BuscaAlunoForm()
-            context = {
-            "alunos": alunos,
-            "form":form,
-            }
+            context["alunos"] = alunos
+            context["form"] = form
             return render(request, "aluno/aluno.html", context)

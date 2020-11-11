@@ -39,7 +39,7 @@ class EnderecoForm(ModelForm):
 class AlunoForm(ModelForm):
     class Meta:
         model = Aluno
-        exclude = ["nr_endereco"]
+        fields = '__all__'
 
 class BuscaAlunoForm(forms.Form):
     matricula = forms.IntegerField()

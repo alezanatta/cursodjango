@@ -1,0 +1,57 @@
+{% if alunos %}
+    <div class="row">
+        <div class="col-3">
+            {% if form %}
+                <form method="post" action="{% url 'aluno:index' %}">
+                    {% csrf_token %}
+                    {% include 'aluno/form.html' with form=form %}
+                    <input type="submit" value="Vai" />
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-12">
+    <table class="table table-striped">
+        <thead>
+            
+                <tr>
+                    <td>Nome</td>
+                    <td>Matricula</td>
+                    <td>Data de nascimento</td>
+                    <td>Endereço</td>
+                </tr>
+            
+        </thead>
+        <tbody>
+
+            {% for aluno in alunos %}
+                <tr>              
+                        <td><a href="{% url 'aluno:index' aluno.id %}">{{ aluno.nome }}</a></td>
+                        <td>{{ aluno.matricula }}</td>
+                        <td>{{ aluno.data_nascimento }}</td>
+                        <td>{{ aluno.fk_endereco.nm_rua }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <table class="table table-striped">
+        <thead>
+            
+                <tr>
+                    <td>Nome</td>
+                    <td>Matricula</td>
+                    <td>Data de nascimento</td>
+                    <td>Endereço</td>
+                </tr>
+            
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>Nenhuma informação a apresentar</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
