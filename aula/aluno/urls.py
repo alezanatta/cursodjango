@@ -5,6 +5,7 @@ from . import views
 app_name = "aluno"
 
 urlpatterns = [
+    
     path('', views.busca_aluno, name="index"), #/aluno/
     path('<int:cd_aluno>/', views.busca_aluno, name="index"), #/aluno/
     path('<str:tipo>/', views.busca_aluno, name="edit"),

@@ -27,3 +27,4 @@ class Aluno(models.Model):
     cpf = models.CharField(max_length=14, unique=True)
     nr_endereco = models.IntegerField(null=True, blank=True)
     fk_endereco = models.ForeignKey(Endereco, on_delete=models.PROTECT)
+    seila = models.IntegerField
