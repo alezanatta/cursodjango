@@ -46,3 +46,6 @@ class BuscaAlunoForm(forms.Form):
     help_texts = {
             "matricula": "Sei lá",
         }
+
+class AniversarioForm(forms.Form):
+    mes = forms.IntegerField()

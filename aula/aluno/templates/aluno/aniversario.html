@@ -1,0 +1,38 @@
+{% extends 'aluno/base.html' %}
+
+    {% block conteudo %}
+
+        {% if erros %}
+            {% for erro in erros %}
+                <div class="alert alter-danger">{{ erro }}</div>
+            {% endfor %}                
+        {% endif %}
+
+        <form action="" method="post">
+            {% include "aluno/form.html" %}
+            <input type="submit" value="Vai" />
+        </form>
+
+        <table class="table table-striped">
+            <tr>
+                <td>Nome</td>
+                <td>Data de aniversario</td>
+            </tr>
+        {% if alunos %}
+            {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.data_nascimento }}</td>
+                </tr>
+            {% endfor %}
+        
+        {% else %}
+            <tr>
+                <td></td>
+                <td>Nenhum aniversariante no período</td>
+            </tr>
+        {% endif %}
+        </table>
+
+    
+    {% endblock conteudo %}

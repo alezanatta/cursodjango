@@ -1,5 +1,5 @@
 """
-WSGI config for aula project.
+WSGI config for exemplorest project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,10 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aula.settings')
-
-#os.environ["DJANGO_SETTINGS_MODULE"] = 'aula.settings'
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'exemplorest.settings')
 
 application = get_wsgi_application()
-
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

@@ -3,16 +3,63 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from datetime import datetime
+from datetime import date
 
+#Models
 from .models import Aluno
 
+# ModelForms
 from .forms import CidadeForm
 from .forms import EnderecoForm
 from .forms import AlunoForm
 
+#Forms
 from .forms import BuscaAlunoForm
+from .forms import AniversarioForm
 
 # Create your views here.
+
+def aniversario(request):
+
+    if request.method == "GET":
+
+        mes = date.today().month
+        alunos = Aluno.objects.all().filter(data_nascimento__month=mes)
+        form = AniversarioForm()
+
+        context = {
+            "alunos":alunos,
+            "form":form,
+        }
+
+        return render(request, "aluno/aniversario.html", context)
+
+    elif request.method == "POST":
+        form = AniversarioForm(request.POST)
+        if form.is_valid():
+            mes = form.cleaned_data["mes"]
+            if mes not in range(1,13):
+                erro = "Mes inválido"
+                form = AniversarioForm()
+
+                context = {
+                    "erros":erro,
+                }
+                return render(request, "aluno/aniversario.html", context)
+
+            alunos = Aluno.objects.all().filter(data_nascimento__month=mes)
+            form = AniversarioForm()
+
+            context = {
+                "alunos":alunos,
+                "form":form,
+            }
+
+            return render(request, "aluno/aniversario.html", context)
+    else:
+        return HttpResponse("Não tem")
+
+
 
 def index(request):
     return render(request, "aluno/index.html", {})
@@ -94,8 +141,6 @@ def busca_aluno(request, cd_aluno=0, tipo=""):
                 aluno.id = form.cleaned_data["id"]
                 aluno.delete()
 
-
-
         if tipo == 'edit':
             form = AlunoForm(request.POST)
             if form.is_valid():
@@ -110,8 +155,9 @@ def busca_aluno(request, cd_aluno=0, tipo=""):
         form = BuscaAlunoForm(request.POST)
         if form.is_valid():
             matricula = form.cleaned_data["matricula"]
-            alunos = Aluno.objects.all().filter(matricula=matricula)
+            alunos = Aluno.objects.all().filter(matricula__exact=matricula)
             form = BuscaAlunoForm()
             context["alunos"] = alunos
             context["form"] = form
             return render(request, "aluno/aluno.html", context)
+

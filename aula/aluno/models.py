@@ -1,4 +1,8 @@
-from django.db import models
+from django.db import models, connection
+
+
+from datetime import date
+import pandas as pd
 
 # Create your models here.
 
@@ -28,3 +32,45 @@ class Aluno(models.Model):
     nr_endereco = models.IntegerField(null=True, blank=True)
     fk_endereco = models.ForeignKey(Endereco, on_delete=models.PROTECT)
     seila = models.IntegerField
+
+
+    def is_idade(self):
+        #print((date.today() - self.data_nascimento).days)
+        if ((date.today() - self.data_nascimento).days >= 0) and ((date.today() - self.data_nascimento).days <= 105*365.2425):
+            return True
+        return False
+
+    def is_cpf(self,d1=0,d2=0,i=0):
+        cpf = self.cpf
+        while i<10:
+            d1,d2,i=(d1+(int(cpf[i])*(11-i-1)))%11 if i<9 else d1,(d2+(int(cpf[i])*(11-i)))%11,i+1
+        return (int(cpf[9])==(11-d1 if d1>1 else 0)) and (int(cpf[10])==(11-d2 if d2>1 else 0))
+    
+
+    @staticmethod
+    def aniversario(mes=date.today().month):
+
+        query = f"""
+            SELECT nome, data_nascimento FROM aluno_aluno
+            WHERE MONTH(data_nascimento) = {mes}
+        """
+
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            alunos = cursor.fetchall()
+            #cursor.callproc("nome_proc", [])
+
+            # fetchall -> ResultSet
+            # fetchone -> Somente o primeiro. Mais utilizado com PK ou UQ
+
+            return alunos
+
+    @staticmethod
+    def pd_aniversario(mes=date.today().month):
+        query = f"""
+            SELECT nome, data_nascimento FROM aluno_aluno
+            WHERE MONTH(data_nascimento) = {mes}
+        """
+
+        df = pd.read_sql(query, connection)
+        return df
